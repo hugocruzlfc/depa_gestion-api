@@ -67,7 +67,6 @@ User.hasMany(Incident, {
 
 Faculty.hasMany(User, {
     foreignKey: 'facultyId',   
-    onDelete: 'CASCADE',
     as: 'users',
   });
   
@@ -78,8 +77,7 @@ Faculty.hasMany(User, {
   });
 
 Section.hasMany(User, {
-    foreignKey: 'sectionId',   
-    onDelete: 'CASCADE',
+    foreignKey: 'sectionId',
     as: 'users',
   });
   
