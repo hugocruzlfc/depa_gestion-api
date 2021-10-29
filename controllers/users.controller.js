@@ -2,6 +2,8 @@ const db = require('../config/database');
 const Sequelize = require('sequelize');
 const jwt = require('jsonwebtoken');
 const users = require('../models/users.model');
+const Faculty = require('../models/facultys.model');
+const Section = require('../models/sections.model');
 const Op = Sequelize.Op;
 
 
@@ -10,8 +12,20 @@ const Op = Sequelize.Op;
 exports.allUsers = async(req, res) =>{
     
     try {
-        const allUsers = await users.findAll(
-            {order: [['id', 'asc']]}
+        const allUsers = await users.findAll({
+            order: [['id', 'asc']], 
+            include: [
+                {
+                  model: Faculty,
+                  as: 'facultys',
+                },
+                {
+                  model: Section,
+                  as: 'sections',
+                },
+              ],
+        }
+
         );
         if(allUsers){
             res.status(200).json(allUsers);
@@ -61,8 +75,8 @@ exports.create = async(req, res) =>{
         email: req.body.email,
         password: req.body.password,
         role: req.body.role,
-        section: req.body.section,
-        faculty: req.body.faculty,
+        sectionId: req.body.sectionId,
+        facultyId: req.body.facultyId,
         dni: req.body.dni,
         celular: req.body.celular,
         address: req.body.address
@@ -86,7 +100,6 @@ exports.create = async(req, res) =>{
 
 exports.update = async(req, res) =>{
     const id = req.params.id;
-    console.log(req.body)
     try {
         const num = await users.update(req.body, {where:{ id: id}} );
         if(num == 1){

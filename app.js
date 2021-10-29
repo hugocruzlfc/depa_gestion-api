@@ -61,6 +61,14 @@ app.use( '/api/maintenancePlan', maintenancePlanRoute);
 const notificationsRoute = require('./routes/notifications.route');
 app.use( '/api/notifications', notificationsRoute);
 
+//sections
+const sectionsRoute = require('./routes/sections.route');
+app.use( '/api/sections', sectionsRoute);
+
+//facultys
+const facultysRoute = require('./routes/facultys.route');
+app.use( '/api/facultys', facultysRoute);
+
 
 //sent listen port
 const PORT = process.env.PORT;

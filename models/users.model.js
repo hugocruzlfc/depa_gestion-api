@@ -2,6 +2,8 @@ const Sequelize = require('sequelize');
 const db = require('../config/database');
 
 
+const Faculty = require('./facultys.model');
+const Section = require('./sections.model');
 const Incident = require('./incidents.model');
 
 
@@ -18,17 +20,17 @@ const User = db.define('users', {
     email: {
         type: Sequelize.STRING
     },
-    section: {
-        type: Sequelize.STRING
-    },
     password: {
         type: Sequelize.STRING
     },
     role: {
         type: Sequelize.STRING
     },
-    faculty: {
-        type: Sequelize.STRING
+    facultyId: {
+        type: Sequelize.INTEGER
+    },
+    sectionId: {
+        type: Sequelize.INTEGER
     },
     dni: {
         type: Sequelize.INTEGER
@@ -61,6 +63,30 @@ User.hasMany(Incident, {
     foreignKey: 'userId',
     sourceKey: 'userId',
     as: 'users',
+  });
+
+Faculty.hasMany(User, {
+    foreignKey: 'facultyId',   
+    onDelete: 'CASCADE',
+    as: 'users',
+  });
+  
+  User.belongsTo(Faculty, {
+    foreignKey: 'facultyId',
+    sourceKey: 'facultyId',
+    as: 'facultys',
+  });
+
+Section.hasMany(User, {
+    foreignKey: 'sectionId',   
+    onDelete: 'CASCADE',
+    as: 'users',
+  });
+  
+  User.belongsTo(Section, {
+    foreignKey: 'sectionId',
+    sourceKey: 'sectionId',
+    as: 'sections',
   });
   
 
