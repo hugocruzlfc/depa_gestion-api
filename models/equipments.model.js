@@ -3,8 +3,6 @@ const db = require('../config/database');
 
 const Hardware  = require('./hardwares.model');
 const Incident  = require('./incidents.model');
-const Plans  = require('./maintenancePlans.model');
-
 
 const Equipment = db.define('equipments', {
     id:{
@@ -50,17 +48,6 @@ Equipment.hasMany(Incident , {
   });
   
   Incident.belongsTo(Equipment, {
-    foreignKey: 'equipmentId',
-    as: 'equipments',
-  });
-
-  Equipment.hasMany(Plans , {
-    foreignKey: 'equipmentId',
-    onDelete: 'CASCADE',
-    as: 'maintenancePlans',
-  });
-  
-  Plans.belongsTo(Equipment, {
     foreignKey: 'equipmentId',
     as: 'equipments',
   });

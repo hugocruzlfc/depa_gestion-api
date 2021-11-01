@@ -1,7 +1,8 @@
 const db = require('../config/database');
 const Sequelize = require('sequelize');
 const maintenancePlan = require('../models/maintenancePlans.model');
-const equipment = require('../models/equipments.model');
+const facultys = require('../models/facultys.model');
+const sections = require('../models/sections.model');
 const Op = Sequelize.Op;
 
 
@@ -13,9 +14,13 @@ exports.allMaintenancePlans = async(req, res) =>{
         const maintenancePlans = await maintenancePlan.findAll(
             {order: [['id', 'asc']],include: [
                 {
-                  model: equipment,
-                  as: 'equipments'
-                }
+                  model: facultys,
+                  as: 'facultys'
+                },
+                {
+                  model: sections,
+                  as: 'sections'
+                },
             ]}
         );
         if(maintenancePlans){
@@ -58,12 +63,11 @@ exports.maintenancePlanById = async(req, res) =>{
 exports.create = async(req, res) =>{
     const newMaintenancePlan = {
        
-        faculty: req.body.faculty,
-        section: req.body.section,
+        facultyId: req.body.facultyId,
+        sectionId: req.body.sectionId,
         description: req.body.description,
         done: 'No',
-        starDate: req.body.starDate,
-        equipmentId: req.body.equipmentId
+        starDate: req.body.starDate
     }
     try {
         const maintenancePlanCreate = await maintenancePlan.create(newMaintenancePlan);

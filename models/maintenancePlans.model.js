@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
 
-
+const Faculty  = require('./facultys.model');
+const Section  = require('./sections.model');
 
 const MaintenancePlan = db.define('maintenancePlans', {
     id:{
@@ -10,13 +11,10 @@ const MaintenancePlan = db.define('maintenancePlans', {
         primaryKey: true,
         type: Sequelize.INTEGER
     },
-    section: {
-        type: Sequelize.STRING
+    facultyId: {
+        type: Sequelize.INTEGER
     },
-    faculty: {
-        type: Sequelize.STRING
-    },
-    equipmentId:{
+    sectionId:{
         type: Sequelize.INTEGER
     },
     description: {
@@ -37,6 +35,26 @@ const MaintenancePlan = db.define('maintenancePlans', {
 
 })
 
+Faculty.hasMany(MaintenancePlan , {
+    foreignKey: 'facultyId',
+    onDelete: 'CASCADE',
+    as: 'maintenancePlans',
+  });
+  
+  MaintenancePlan.belongsTo(Faculty, {
+    foreignKey: 'facultyId',
+    as: 'facultys',
+  });
 
+  Section.hasMany(MaintenancePlan , {
+    foreignKey: 'sectionId',
+    onDelete: 'CASCADE',
+    as: 'maintenancePlans',
+  });
+  
+  MaintenancePlan.belongsTo(Section, {
+    foreignKey: 'sectionId',
+    as: 'sections',
+  });
 
 module.exports = MaintenancePlan;
