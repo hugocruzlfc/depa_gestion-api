@@ -65,8 +65,8 @@ exports.equipmentById = async(req, res) =>{
 exports.create = async(req, res) =>{
     const newEquipment = {
         name: req.body.equipment.name,
-        faculty: req.body.equipment.faculty,
-        section: req.body.equipment.section
+        facultyId: req.body.equipment.facultyId,
+        sectionId: req.body.equipment.sectionId
     }
     const t = await db.transaction();
     let newHardwares = [];
