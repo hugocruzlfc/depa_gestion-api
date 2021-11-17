@@ -2,6 +2,8 @@ const db = require('../config/database');
 const Sequelize = require('sequelize');
 const equipment = require('../models/equipments.model');
 const hardwares = require('../models/hardwares.model');
+const Faculty = require('../models/facultys.model');
+const Section = require('../models/sections.model');
 const Op = Sequelize.Op;
 
 
@@ -15,7 +17,15 @@ exports.allequipments = async(req, res) =>{
                 {
                   model: hardwares,
                   as: 'hardwares'
-                }
+                },
+                {
+                    model: Faculty,
+                    as: 'facultys',
+                  },
+                  {
+                    model: Section,
+                    as: 'sections',
+                  },
             ]}
         );
         if(equipments){

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const users = require('../models/users.model');
 const Faculty = require('../models/facultys.model');
 const Section = require('../models/sections.model');
+const bcrypt = require('bcrypt');
 const Op = Sequelize.Op;
 
 
@@ -69,11 +70,12 @@ exports.userById = async(req, res) =>{
 
 
 exports.create = async(req, res) =>{
-    
+    const salt = bcrypt.genSaltSync(10, 'a');
+    const passwordEncrypt = bcrypt.hashSync(req.body.password, salt);
     const newUser = {
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: passwordEncrypt,
         role: req.body.role,
         sectionId: req.body.sectionId,
         facultyId: req.body.facultyId,
@@ -140,18 +142,24 @@ exports.delete = async(req, res) =>{
     return token
  }
 
-exports.login = async(req, res) =>{
+ exports.login = async(req, res) =>{
     let { email, password } = req.body;
     
     try {
         const findUser = await users.findOne({
             where: {
-              email, password
+              email
             }});
-        if(findUser){
-           // const token = generateAuthToken(findUser.name, findUser.email); 
-            res.status(200).json({auth: true, user: findUser });
-        }else{
+            if(findUser){
+             if (bcrypt.compareSync(password, findUser.password)) {
+                res.status(200).json({auth: true, user: findUser });
+           }
+           else{
+            res.status(200).json({auth: false });
+        }
+        }
+          
+        else{
             res.status(200).json({auth: false });
         }
     } catch (error) {

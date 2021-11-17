@@ -3,6 +3,8 @@ const db = require('../config/database');
 
 const Hardware  = require('./hardwares.model');
 const Incident  = require('./incidents.model');
+const Faculty = require('./facultys.model');
+const Section = require('./sections.model');
 
 const Equipment = db.define('equipments', {
     id:{
@@ -14,12 +16,12 @@ const Equipment = db.define('equipments', {
     name: {
         type: Sequelize.STRING
     },
-    faculty: {
-        type: Sequelize.STRING
-    },
-    section: {
-        type: Sequelize.STRING
-    },
+    facultyId: {
+      type: Sequelize.INTEGER
+  },
+  sectionId: {
+      type: Sequelize.INTEGER
+  },
     
     createdAt: {
         type: Sequelize.DATE
@@ -51,6 +53,30 @@ Equipment.hasMany(Incident , {
     foreignKey: 'equipmentId',
     as: 'equipments',
   });
+
+
+  Faculty.hasMany(Equipment, {
+    foreignKey: 'facultyId',   
+    as: 'equipments',
+  });
+  
+  Equipment.belongsTo(Faculty, {
+    foreignKey: 'facultyId',
+    sourceKey: 'facultyId',
+    as: 'facultys',
+  });
+
+Section.hasMany(Equipment, {
+    foreignKey: 'sectionId',
+    as: 'equipments',
+  });
+  
+  Equipment.belongsTo(Section, {
+    foreignKey: 'sectionId',
+    sourceKey: 'sectionId',
+    as: 'sections',
+  });
+  
   
 
 module.exports = Equipment;
